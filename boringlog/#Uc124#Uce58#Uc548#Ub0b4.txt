@@ -1,0 +1,9 @@
+보링로그 PIN 인증 버전
+
+1. GitHub 저장소의 boringlog 폴더 안 파일을 이 패키지 내용으로 교체하세요.
+2. Netlify 환경변수 OPENAI_API_KEY(비밀 API 키), APP_ACCESS_PIN(6~12자리 숫자)를 설정하세요.
+3. GitHub 커밋 후 Netlify 자동 배포가 완료되면 휴대전화에서 새로고침하세요.
+4. 최초 접속 시 PIN을 입력하세요. 서버 PIN 변경 후 재배포하면 이전 로그인 토큰은 무효화됩니다.
+5. PIN 변경은 Netlify Environment variables에서 APP_ACCESS_PIN 값을 변경하고 재배포하세요.
+
+중요: PIN은 HTML/GitHub 코드에 적지 마세요. 6자리 숫자는 추측 공격에 취약할 수 있습니다. 이 버전은 로그인 실패 횟수를 서버 전체에서 공유해 제한하는 기능이 없으므로 공개 배포 전 Netlify WAF/Rate limiting 또는 외부 인증 서비스를 추가하는 것이 좋습니다. PIN 변경 후 기존 브라우저 저장 데이터는 삭제되지 않습니다. 브라우저 데이터 삭제 시 시료 기록이 유실될 수 있으니 XLSX와 전체 백업 ZIP을 주기적으로 저장하세요.

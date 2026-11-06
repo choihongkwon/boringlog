@@ -1,0 +1,33 @@
+보링로그 AI 현장 기록기 - 통합판
+
+[구성]
+public/ : 갤럭시 A52용 PWA 화면, 아이콘, ZIP 생성 라이브러리
+netlify/functions/analyze.mjs : 새 사진 OpenAI 판독
+netlify/functions/transcribe.mjs : 녹음 OpenAI 텍스트 변환
+netlify.toml : Netlify 빌드/함수 설정
+
+[배포 중요]
+1. ZIP을 PC에서 압축 해제합니다.
+2. 이 폴더의 파일을 GitHub 저장소 최상위에 올립니다 (public, netlify, netlify.toml).
+3. Netlify의 기존 사이트에서 GitHub 저장소를 연결하여 배포합니다.
+   - Build command: 비워 둠
+   - Publish directory: public
+   - Functions directory: netlify/functions
+4. Netlify 사이트의 Environment variables에서 아래 두 변수를 등록합니다.
+   OPENAI_API_KEY : 본인의 OpenAI API 키 (웹 화면이나 채팅에 공개 금지)
+   APP_ACCESS_PIN : 본인만 아는 충분히 긴 비밀번호 (예: 16자 이상 무작위 문자열)
+5. 환경변수를 설정한 뒤 반드시 재배포합니다.
+6. 휴대전화의 기존 사이트 URL을 새로고침한 후 앱 하단 'API 접근 설정'에 APP_ACCESS_PIN 값을 입력합니다.
+7. 새 사진을 찍고 '새 사진 AI 판독 시작'을 누릅니다.
+8. 녹음 시작 → 녹음 저장을 누르면 음성 텍스트가 특이사항에 추가됩니다.
+9. '시료 정보 저장'을 누르면 내부 기록에 누적하고, 전체 누적 CSV + 개별 CSV + 사진 2장 + 음성 + 텍스트를 ZIP 하나로 다운로드합니다.
+
+[유의]
+- Netlify Drop으로 public 폴더만 배포하면 서버 함수가 없어서 AI 판독/음성 변환이 작동하지 않습니다. Git 연동 배포를 사용하세요.
+- Netlify에서 기존 프로젝트를 유지해야 기존 앱 URL을 사용할 수 있습니다.
+- API 호출은 유료입니다. 앱 접근 PIN은 기본적인 제한일 뿐 강력한 사용자 인증을 대체하지 않습니다. URL 및 PIN을 타인과 공유하지 마세요.
+- CSV는 시료 저장 시점의 누적 기록입니다. 가장 최근에 저장한 ZIP의 전체_시료_누적.csv에 현재까지의 기록이 들어 있습니다.
+- 기록은 해당 기기 브라우저의 IndexedDB에도 저장됩니다. 앱 삭제, 브라우저 데이터 삭제, 기기 분실 시 없어질 수 있으므로 ZIP을 다른 저장장치에 백업하세요.
+- 사진 AI 추정과 음성 인식 결과는 반드시 현장에서 확인·수정하세요.
+- 녹음 내용 TXT는 특이사항의 최종 텍스트를 담습니다. 직접 입력만 한 경우에도 TXT가 만들어질 수 있습니다.
+- 녹음 후 음성 변환이 끝나기 전에 시료를 저장하면 변환 문구가 누락될 수 있으므로 화면의 '문자 변환 완료'를 확인하세요.

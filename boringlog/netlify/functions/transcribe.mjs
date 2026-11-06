@@ -1,9 +1,10 @@
+import {authorized} from './_auth.mjs';
 const json=(x,status=200)=>new Response(JSON.stringify(x),{status,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'}});
 export default async function(req){
  if(req.method!=='POST')return json({error:'POST만 지원합니다.'},405);
- const key=process.env.OPENAI_API_KEY,pin=process.env.APP_ACCESS_PIN;
- if(!key||!pin)return json({error:'서버 환경변수 OPENAI_API_KEY 및 APP_ACCESS_PIN을 설정하세요.'},503);
- if(req.headers.get('x-app-pin')!==pin)return json({error:'접근 PIN이 올바르지 않습니다.'},401);
+ const key=process.env.OPENAI_API_KEY;
+ if(!key||!process.env.APP_ACCESS_PIN)return json({error:'서버 환경변수 OPENAI_API_KEY 및 APP_ACCESS_PIN을 설정하세요.'},503);
+ if(!await authorized(req))return json({error:'인증이 만료되었습니다. 새 PIN으로 로그인하세요.'},401);
  try{
  const form=await req.formData();const audio=form.get('audio');
  if(!(audio instanceof File)||audio.size===0||audio.size>20_000_000)return json({error:'녹음 파일이 없거나 20MB를 초과했습니다.'},400);
